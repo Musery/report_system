@@ -1,0 +1,22 @@
+{
+  "postgres": {
+    "host": "10.50.2.216",
+    "port": 44377,
+    "database": "",
+    "username": "",
+    "password": ""
+  },
+  "clickhouse": {
+    "url": "http://10.50.2.216",
+    "port": "48221",
+    "debug": "false",
+    "basicAuth": {
+      "username": "",
+      "password": ""
+    },
+    "config": {
+      "session_timeout": 60,
+      "database": "default"
+    }
+  }
+}

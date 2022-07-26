@@ -1,0 +1,48 @@
+{
+  "App": {
+    "port": 4399
+  },
+  "Table": {
+    "asset": {
+      "source": "postgres",
+      "alias": "soc_asset",
+      "select": ["name", "asset_ip", "importance"]
+    },
+    "event": {
+      "source": "clickhouse",
+      "alias": "soc_all"
+    }
+  },
+  "Log4js": {
+    "appenders": {
+      "error": {
+        "category": "errorLogger",
+        "type": "dateFile",
+        "filename": "logs/error/error",
+        "alwaysIncludePattern": true,
+        "pattern": "yyyy-MM-dd-hh.log"
+      },
+      "response": {
+        "category": "resLogger",
+        "type": "dateFile",
+        "filename": "logs/info/info",
+        "alwaysIncludePattern": true,
+        "pattern": "yyyy-MM-dd-hh.log"
+      }
+    },
+    "categories": {
+      "error": {
+        "appenders": ["error"],
+        "level": "error"
+      },
+      "response": {
+        "appenders": ["response"],
+        "level": "info"
+      },
+      "default": {
+        "appenders": ["response"],
+        "level": "info"
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <title>report wysiwyg</title>
+    <link rel="stylesheet" href="./style/iconfont.css" />
+    <link rel="stylesheet" href="./style/style.css" />
+    <link rel="stylesheet" href="./node_modules/toastr/build/toastr.css" />
+    <link rel="stylesheet" href="./node_modules/prosemirror-view/style/prosemirror.css" />
+</head>
+
+<body>
+    <div id="editor">
+
+    </div>
+    <script type="module">
+        import * as wysiwyg from './index.js'
+        import * as _gfm from "./gfm/index.js";
+        import * as _common from "./common/index.js";
+        import * as _graph from "./graph/index.js";
+
+        wysiwyg.build().sup(_common.supports).sup(_gfm.supports).sup(_graph.supports).complete({
+            wss: "ws://localhost:4399",
+            place: "#editor",
+            editable: true,
+            template: "design",
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,455 @@
+:root {
+    --font: Roboto, HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+    --font-code: Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
+    --gray: 236, 239, 244 !important;
+    --black: 46, 52, 64 !important;
+    --secondary: 129, 161, 193 !important;
+    --line: 216, 222, 233 !important;
+    --surface: 255, 255, 255 !important
+}
+
+.rjx-right {
+    margin-left: 255px;
+    transition: all 0.5s;
+}
+
+/* ----------- menu 样式 ---------------- */
+.rjx-menu {
+    width: 100%;
+    display: flex;
+    overflow: auto;
+    position: relative;
+    border: 1px solid rgba(var(--line), 1);
+    box-sizing: border-box;
+    border-bottom: none;
+    transition: all 0.5s;
+}
+
+.rjx-menu .disabled {
+    display: none;
+}
+
+/* button 样式 */
+.rjx-button {
+    border: 0;
+    padding: 0.25em;
+    margin: 0.5em;
+    box-sizing: unset;
+    background-color: rgba(var(--surface), 1);
+}
+
+.rjx-button.active {
+    background-color: rgba(var(--black), 0.2);
+}
+
+.rjx-button:hover {
+    background-color: rgba(var(--gray), 1);
+}
+
+.rjx-button:disabled {
+    display: none;
+}
+
+.rjx-button .icon {
+    font-size: 2em;
+}
+
+/* divider 分割线 样式 */
+.rjx-divider {
+    width: 1px;
+    margin: 0.75em 1em;
+    min-height: 1.5em;
+    background-color: rgba(var(--line), 1);
+}
+
+/* -------------- 编辑框 样式 ------------ */
+.rjx-container {
+    min-height: 1024px;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: var(--font);
+    box-sizing: border-box;
+    border: 1px solid rgba(var(--line), 1);
+}
+
+.rjx-container .editor {
+    padding: 1.25em 1.25em;
+    outline: none;
+}
+
+/** 各类样式组件 */
+/**  行距*/
+.rjx-container .editor>* {
+    margin: 10px 0px;
+}
+
+/** 段落*/
+.rjx-container .editor p {
+    margin-left: 20px;
+    font-size: 1em;
+    line-height: 1.5;
+    letter-spacing: 0.5px;
+}
+
+/** 区块*/
+.rjx-container .editor blockquote {
+    padding-left: 1.875em;
+    line-height: 1.75em;
+    border-left: 4px solid rgba(var(--line), 1);
+}
+
+/** 标题 */
+.rjx-container .editor .heading {
+    margin: 20px 0;
+    font-weight: 400;
+}
+
+.rjx-container .editor h1 {
+    font-size: 1.625em;
+    line-height: 1.2;
+}
+
+.rjx-container .editor h2 {
+    font-size: 1.375em;
+    line-height: 1.14;
+}
+
+.rjx-container .editor h3 {
+    font-size: 1.25em;
+    line-height: 1;
+}
+
+/** list */
+.rjx-container .editor .list-item,
+.rjx-container .editor .list-item>* {
+    margin: 0.5em 0;
+}
+
+.rjx-container .editor li::marker {
+    color: rgba(var(--secondary), 1);
+}
+
+/** 代码块*/
+.rjx-container .editor .code {
+    background-color: rgba(var(--gray), 1);
+    padding: 1.2em 0.4em 1.4em;
+}
+
+/** 代码块内部*/
+.rjx-container .editor .code pre {
+    font-size: 0.875em;
+    margin: 0 1.2em !important;
+    white-space: pre;
+    overflow: auto;
+    color: rgba(var(--black), 1);
+}
+
+/** 代码块内部代码*/
+.rjx-container .editor .code pre code {
+    line-height: 1.5;
+    font-family: var(--font-code);
+}
+
+.rjx-container .editor img {
+    text-align: center;
+    font-size: 0;
+    line-height: 1;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    margin: 0 2px;
+}
+
+.rjx-container .editor .code-inline {
+    background-color: rgba(var(--black), 1);
+    color: rgba(var(--gray), 1);
+    font-weight: 500;
+    padding: 0 0.2em;
+    font-size: 1.2em;
+}
+
+.rjx-container .editor .link,
+a {
+    color: rgba(var(--secondary), 1);
+    cursor: pointer;
+    transition: all 0.5s;
+    font-weight: 500;
+}
+
+.rjx-container .editor .link:hover,
+a:hover {
+    background-color: rgba(var(--gray), 1);
+}
+
+.rjx-container .editor .strike-through {
+    text-decoration-color: rgba(var(--black), 1);
+}
+
+/** 脚注*/
+.rjx-container .editor .footnote-definition {
+    border: 1px solid rgba(var(--line), 1);
+    background-color: rgba(var(--gray), 1);
+    padding: 1em;
+    display: flex;
+}
+
+.rjx-container .editor .footnote-definition>.footnote-definition_content {
+    flex: 1;
+    width: calc(100% - 1em);
+}
+
+.rjx-container .editor .footnote-definition>.footnote-definition_anchor {
+    width: 1em;
+}
+
+/** 表格*/
+.rjx-container .editor .tableWrapper {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.rjx-container .editor .tableWrapper * {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.rjx-container .editor .tableWrapper .hide {
+    display: none;
+}
+
+.rjx-container .editor table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    min-width: 125px;
+    overflow: auto;
+    width: 100%;
+}
+
+.rjx-container .editor th {
+    background: rgba(var(--gray), 1);
+    font-weight: 400;
+}
+
+.rjx-container .editor td,
+.rjx-container .editor th {
+    padding: 0 1em;
+    vertical-align: top;
+    text-align: left;
+    position: relative;
+    min-width: 100px;
+    border: 1px solid rgba(var(--line), 1);
+    line-height: 3;
+    height: 3em;
+}
+
+.rjx-container .editor table p {
+    line-height: unset;
+}
+
+.rjx-container .tableWrapper table {
+    width: calc(100% - 2em) !important;
+    margin: 1em 0 1em 1em !important;
+}
+
+.rjx-container .tableWrapper table .rjx-cell-left,
+.rjx-container .tableWrapper table .rjx-cell-point,
+.rjx-container .tableWrapper table .rjx-cell-top {
+    position: absolute;
+}
+
+.rjx-container .tableWrapper table .rjx-cell-left::after,
+.rjx-container .tableWrapper table .rjx-cell-point::after,
+.rjx-container .tableWrapper table .rjx-cell-top::after {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+    background: rgba(var(--gray), 0.5);
+    content: '';
+}
+
+.rjx-container .tableWrapper table .rjx-cell-left:hover::after,
+.rjx-container .tableWrapper table .rjx-cell-point:hover::after,
+.rjx-container .tableWrapper table .rjx-cell-top:hover::after {
+    background: rgba(var(--black), 0.5);
+}
+
+.rjx-container .tableWrapper table .rjx-cell-left {
+    left: calc(-6px - 0.5em);
+    top: 0;
+    bottom: 0;
+    width: 0.5em;
+}
+
+.rjx-container .tableWrapper table .rjx-cell-top {
+    left: 0;
+    right: 0;
+    top: calc(-6px - 0.5em);
+    height: 0.5em;
+}
+
+.rjx-container .tableWrapper table .rjx-cell-point {
+    left: calc(-2px - 1em);
+    top: calc(-2px - 1em);
+    width: 1em;
+    height: 1em;
+}
+
+.rjx-container .tableWrapper table .rjx-cell-point .icon {
+    position: absolute;
+}
+
+.echarts {
+    position: relative;
+    margin-left: 2px;
+    margin-right: 2px;
+    display: inline-flex;
+}
+
+.echarts .hide {
+    display: none;
+}
+
+.loading {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(var(--line), 1);
+}
+
+/* -------- toc 样式 --------- */
+
+.rjx-left {
+    float: left;
+    width: 240px;
+    transition: all 0.5s;
+}
+
+.toc {
+    padding: 10px;
+    width: 100%;
+    min-height: 1024px;
+    position: relative;
+    overflow: hidden;
+    background: rgba(var(--surface), 1);
+    border: 1px solid rgba(var(--line), 1);
+    box-sizing: border-box;
+}
+
+.toc ul {
+    margin: 0 10px;
+    padding: 0;
+    list-style: none;
+    font-size: 14px;
+}
+
+.toc ul li {
+    margin: 8px;
+    padding: 0;
+    list-style: none;
+    white-space: nowrap;
+    outline: none;
+}
+
+.toc-title {
+    margin: 0;
+    padding: 0 4px;
+    cursor: pointer;
+    color: var(--line);
+}
+
+.tooltip {
+    display: inline-flex;
+    cursor: pointer;
+    z-index: 2;
+    justify-content: space-evenly;
+    position: absolute;
+    border: 1px solid rgba(var(--line), 1);
+    overflow: hidden;
+    background: rgba(var(--surface), 1);
+}
+
+.tooltip .icon {
+    position: relative;
+    color: rgba(var(--black), 1);
+    width: 1.5em;
+    line-height: 1.5em;
+    font-size: 1.5em;
+    text-align: center;
+    transition: all 0.5s;
+}
+
+.tooltip .icon.active {
+    background-color: rgba(var(--black), 0.2);
+}
+
+.tooltip .icon:hover {
+    background-color: rgba(var(--gray), 1);
+}
+
+.tooltip .icon:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1px;
+    bottom: 0;
+    background: rgba(var(--line), 1);
+}
+
+.tooltip.hide,
+.tooltip .hide {
+    display: none;
+}
+
+/** --  sidenav -- **/
+
+.sidenav {
+    height: 100%;
+    /* 100% Full-height */
+    width: 0;
+    /* 0 width - change this with JavaScript */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Stay on top */
+    top: 0;
+    /* Stay at the top */
+    right: 0;
+    /* right side */
+    background-color: rgba(var(--surface), 1);
+    overflow-x: hidden;
+    /* Disable horizontal scroll */
+    padding-top: 0px;
+    /* Place content 60px from the top */
+    transition: all 0.5s;
+    /* 0.5 second transition effect to slide in the sidenav */
+    border: 1px solid rgba(var(--line), 1);
+}
+
+.sidenav .header {
+    line-height: 1;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(var(--line), 1);
+    padding: 16px;
+
+}
+
+.sidenav .cm-editor {
+    height: 80%;
+    border-bottom: 1px solid rgba(var(--line), 1);
+}
+
+.sidenav .cm-editor.cm-focused {
+    outline: 0px;
+}
+
+/** --  sidenav end -- **/
