@@ -1,7 +1,9 @@
 import { i18next } from "./i18n.js";
 import * as CodeMirror from "codemirror";
 import { sql } from "@codemirror/lang-sql";
+import { json } from "@codemirror/lang-json";
 import * as CodeMirrorState from "@codemirror/state";
+import toastr from "toastr";
 
 export function buildElement(el, styles, attrs) {
   const ele = document.createElement(el);
@@ -39,8 +41,8 @@ export const buildTooltip = (config, view) => {
   return tooltip;
 };
 
-// 创建抽屉 (目前只支持最普通的设置)
-export const buildAiSQLEditor = (title, aisql, view, callback) => {
+// 创建外部边界框
+export const buildOuterEditor = (title, content, view, callback) => {
   const sidenav = buildElement("div", ["sidenav"], { style: "width: 0px" });
 
   // header 标题栏 + x
@@ -56,31 +58,39 @@ export const buildAiSQLEditor = (title, aisql, view, callback) => {
   // 编辑区 codemirror
   const codemirror = new CodeMirror.EditorView({
     state: CodeMirrorState.EditorState.create({
-      doc: aisql,
+      doc: content,
       extensions: [
         CodeMirror.basicSetup,
         new CodeMirrorState.Compartment().of(sql()),
+        new CodeMirrorState.Compartment().of(json()),
       ],
     }),
     parent: sidenav,
   });
-
   view.state.schema.root.appendChild(sidenav);
 
   return {
-    hidden: () => {
-      sidenav.setAttribute("style", "width: 0px");
-      if (view.state.schema.right) {
-        view.state.schema.right.setAttribute("style", "margin-left: 255px");
-      }
-      if (view.state.schema.left) {
-        view.state.schema.left.setAttribute("style", "width: 240px");
-      }
+    isShow: false,
+    hidden: function () {
+      // 进行sql/json自定格式化
+      let succ = true;
       if (callback) {
-        callback(codemirror.state.sliceDoc());
+        succ = callback(codemirror.state.sliceDoc());
+      }
+      if (succ) {
+        sidenav.setAttribute("style", "width: 0px");
+        if (view.state.schema.right) {
+          view.state.schema.right.setAttribute("style", "margin-left: 255px");
+        }
+        if (view.state.schema.left) {
+          view.state.schema.left.setAttribute("style", "width: 240px");
+        }
+        this.isShow = false;
+      } else {
+        toastr.error(i18next.t("_edit_error"));
       }
     },
-    show: () => {
+    show: function () {
       sidenav.setAttribute(
         "style",
         `width: ${Math.min(document.body.clientWidth * 0.25, 500)}px`
@@ -91,8 +101,9 @@ export const buildAiSQLEditor = (title, aisql, view, callback) => {
       if (view.state.schema.left) {
         view.state.schema.left.setAttribute("style", "width: 0px");
       }
+      this.isShow = true;
     },
-    remove: () => {
+    remove: function () {
       sidenav.remove();
     },
   };

@@ -1,6 +1,8 @@
 import { u } from "unist-builder";
 import { Plugin } from "prosemirror-state";
-import { buildAiSQLEditor, buildElement } from "../util/element.js";
+import { format } from "sql-formatter";
+import { Parser, util } from "@florajs/sql-parser";
+import { buildOuterEditor, buildElement } from "../util/element.js";
 
 const id = "_table";
 
@@ -29,7 +31,12 @@ export const _table = {
       label: "_table",
       command: (view) => (state, dispatch, view) => {
         const { tr } = state;
-        const node = state.schema.nodes[id].create();
+        const node = state.schema.nodes[id].create(
+          {},
+          state.schema.text(
+            `SELECT formatDateTime(toStartOfInterval("collectorReceiptTime", INTERVAL '1' HOUR), '%Y-%m-%d %H') AS "时间", count(1) AS "eventCount" FROM "event" GROUP BY "时间" ORDER BY "时间" ASC LIMIT 0,10`
+          )
+        );
         dispatch(tr.replaceSelectionWith(node));
         return true;
       },
@@ -69,25 +76,35 @@ export function buildTableView() {
           const table = buildElement("table", ["hide"]);
           dom.appendChild(table);
 
-          const editor = buildAiSQLEditor(
+          const editor = buildOuterEditor(
             "_table",
-            node.textContent,
+            format(node.textContent),
             view,
-            (aisql) => {
-              if (aisql !== node.textContent) {
-                const { tr, schema } = view.state;
-                view.dispatch(
-                  tr.replaceWith(
-                    getPos() + 1,
-                    getPos() + 1 + node.textContent.length,
-                    [schema.text(aisql)]
-                  )
-                );
+            (content) => {
+              try {
+                const aisql = util.astToSQL(new Parser().parse(content));
+                if (aisql !== node.textContent) {
+                  const { tr, schema } = view.state;
+                  view.dispatch(
+                    tr.replaceWith(
+                      getPos() + 1,
+                      getPos() + 1 + node.textContent.length,
+                      [schema.text(aisql)]
+                    )
+                  );
+                }
+                return true;
+              } catch (err) {
+                console.log(err);
+                return false;
               }
             }
           );
 
           const render = () => {
+            while (table.firstChild) {
+              table.removeChild(table.firstChild);
+            }
             table.classList.add("hide");
             error.classList.add("hide");
             loading.classList.remove("hide");
@@ -138,10 +155,16 @@ export function buildTableView() {
               return false;
             },
             selectNode: () => {
-              editor.show();
+              dom.classList.add("ProseMirror-selectednode");
+              if (view.editable) {
+                editor.show();
+              }
             },
             deselectNode: () => {
-              editor.hidden();
+              dom.classList.remove("ProseMirror-selectednode");
+              if (view.editable) {
+                editor.hidden();
+              }
             },
             stopEvent: (event) => false,
             ignoreMutation: () => true,

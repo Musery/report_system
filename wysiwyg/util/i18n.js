@@ -58,36 +58,52 @@ const translation = {
     en: "statistics",
   },
   _data_help: {
-    zh: "只使用第一个返回值作为展示值",
-    en: "Only use the first return value as the display value",
+    zh: "只使用第一个字段返回值作为展示值",
+    en: "Only use the first field return value as the display value",
   },
   _echarts: {
     zh: "图形",
-    en: "graph",
+    en: "echarts",
   },
-  _pie: {
+  _echarts_help: {
+    zh: "可以通过图形配置进行样式修改",
+    en: "Style modifications can be made through echarts configuration",
+  },
+  _echarts_option: {
+    zh: "图形配置",
+    en: "echarts option",
+  },
+  _echarts_option_help: {
+    zh: "参考echarts配置",
+    en: "Refer to echarts configuration",
+  },
+  pie: {
     zh: "饼图",
     en: "pie chart",
   },
-  _line: {
+  line: {
     zh: "折线图",
     en: "line chart",
   },
-  _bar: {
+  bar: {
     zh: "柱状图",
     en: "bar chart",
   },
-  _scatter: {
+  scatter: {
     zh: "散点图",
     en: "scatter chart",
   },
-  _radar: {
+  radar: {
     zh: "雷达图",
     en: "radar chart",
   },
   _edit: {
     zh: "编辑",
     en: "edit",
+  },
+  _edit_error: {
+    zh: "编辑错误, 请检查格式是否正确",
+    en: "Editing error, please check the format is correct",
   },
   _timing_save_success: {
     zh: "自动保存成功",

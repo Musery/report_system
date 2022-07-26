@@ -1,7 +1,9 @@
 import { u } from "unist-builder";
 import { InputRule } from "prosemirror-inputrules";
 import { Plugin } from "prosemirror-state";
-import { buildElement, buildAiSQLEditor } from "../util/element.js";
+import { format } from "sql-formatter";
+import { Parser, util } from "@florajs/sql-parser";
+import { buildElement, buildOuterEditor } from "../util/element.js";
 
 const id = "_data";
 
@@ -19,7 +21,7 @@ export const _data = {
           tr.replaceWith(
             start,
             end,
-            state.schema.nodes[id].create({ aisql, type: id, title })
+            state.schema.nodes[id].create({ aisql, type: id })
           );
         }
 
@@ -34,7 +36,9 @@ export const _data = {
       label: "_data",
       command: (view) => (state, dispatch, view) => {
         const { tr } = state;
-        const node = state.schema.nodes[id].create({ aisql: "" });
+        const node = state.schema.nodes[id].create({
+          aisql: `SELECT COUNT(*) AS "eventCount" FROM "event"`,
+        });
         dispatch(tr.replaceSelectionWith(node));
         return true;
       },
@@ -46,7 +50,6 @@ export const _data = {
     attrs: {
       aisql: { default: "" },
       type: { default: id },
-      title: { default: null },
     },
     group: "inline",
     toDOM(node) {
@@ -58,7 +61,6 @@ export const _data = {
       return u("image", {
         url: prose.attrs.aisql,
         alt: prose.attrs.type,
-        title: prose.attrs.title,
       });
   },
   // 从MDAST解析
@@ -67,7 +69,6 @@ export const _data = {
       return schema.node(id, {
         aisql: mdast.url,
         type: mdast.alt,
-        title: mdast.title,
       });
   },
 };
@@ -78,21 +79,27 @@ export function buildDataView() {
       nodeViews: {
         _data: (node, view, getPos) => {
           const dom = buildElement("code", ["code-inline"]);
-          const editor = buildAiSQLEditor(
+          const editor = buildOuterEditor(
             "_data",
-            node.attrs.aisql,
+            format(node.attrs.aisql),
             view,
-            (aisql) => {
-              if (aisql !== node.attrs.aisql) {
-                // 更新节点
-                const { tr, schema } = view.state;
-                view.dispatch(
-                  tr.setNodeMarkup(getPos(), schema.nodes[id], {
-                    aisql,
-                    type: node.attrs.type,
-                    title: node.attrs.title,
-                  })
-                );
+            (content) => {
+              try {
+                const aisql = util.astToSQL(new Parser().parse(content));
+                if (aisql !== node.attrs.aisql) {
+                  // 更新节点
+                  const { tr, schema } = view.state;
+                  view.dispatch(
+                    tr.setNodeMarkup(getPos(), schema.nodes[id], {
+                      aisql,
+                      type: node.attrs.type,
+                    })
+                  );
+                }
+                return true;
+              } catch (err) {
+                console.log(err);
+                return false;
               }
             }
           );
@@ -130,11 +137,15 @@ export function buildDataView() {
             },
             selectNode: () => {
               dom.classList.add("ProseMirror-selectednode");
-              editor.show();
+              if (view.editable) {
+                editor.show();
+              }
             },
             deselectNode: () => {
               dom.classList.remove("ProseMirror-selectednode");
-              editor.hidden();
+              if (view.editable) {
+                editor.hidden();
+              }
             },
             stopEvent: (event) => false,
             ignoreMutation: () => true,
